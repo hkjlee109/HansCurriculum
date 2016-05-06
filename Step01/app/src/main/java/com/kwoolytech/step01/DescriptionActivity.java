@@ -12,9 +12,13 @@ public class DescriptionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
 
-        int resourceId = 0;
         Intent intent = getIntent();
-        String company = intent.getStringExtra("Company");
+
+        DisplayCompany(GetCompanyResourceId(intent.getStringExtra("Company")));
+    }
+
+    private int GetCompanyResourceId(String company) {
+        int resourceId = 0;
 
         switch(company) {
             case "Dasan Networks":
@@ -26,8 +30,15 @@ public class DescriptionActivity extends Activity {
             case "GE Appliances":
                 resourceId = R.drawable.geappliances;
                 break;
+            default:
+                resourceId = R.drawable.auckland;
+                break;
         }
 
+        return resourceId;
+    }
+
+    private void DisplayCompany(int resourceId) {
         BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(this, resourceId);
 
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
