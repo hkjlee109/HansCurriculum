@@ -3,6 +3,7 @@ package com.kwoolytech.step01;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
             convertView = inflater.inflate(itemLayout, parent, false);
 
             TextView textView = (TextView)convertView.findViewById(R.id.textView);
-            textView.setText(list.get(position));
+            textView.setText(list.get(pos));
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,14 +63,15 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
             });
 
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(context, GetCompanyResourceId(list.get(position)));
+            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(context, GetCompanyResourceId(list.get(pos)));
             imageView.setImageDrawable(bitmapDrawable);
 
             Button button = (Button)convertView.findViewById(R.id.button);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GetCompanyHomepageURL(list.get(pos))));
+                    context.startActivity(intent);
                 }
             });
         }
@@ -95,5 +97,26 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
         }
 
         return resourceId;
+    }
+
+    private String GetCompanyHomepageURL(String company) {
+        String url;
+
+        switch (company) {
+            case "Dasan Networks":
+                url = "http://www.dasannetworks.com";
+                break;
+            case "SK Telecom":
+                url = "http://www.sktelecom.com";
+                break;
+            case "GE Appliances":
+                url = "http://www.geappliances.com";
+                break;
+            default:
+                url = "http://www.aucland.ac.nz";
+                break;
+        }
+
+        return url;
     }
 }
