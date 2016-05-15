@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.View;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
@@ -16,12 +17,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayAdapter<CharSequence> adapter;
-        adapter = ArrayAdapter.createFromResource(this, R.array.my_company, android.R.layout.simple_list_item_1);
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("Dasan Networks");
+        list.add("SK Telecom");
+        list.add("GE Appliances");
+
+        KwoolyCompanyAdapter adapter = new KwoolyCompanyAdapter(this, R.layout.listviewitem_company,list);
 
         listView = (ListView)findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
