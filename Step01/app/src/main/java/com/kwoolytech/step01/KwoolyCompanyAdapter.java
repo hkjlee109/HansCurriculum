@@ -47,13 +47,12 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        if(convertView==null){
+        if(convertView==null) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(itemLayout, parent, false);
 
-            TextView textView = (TextView)convertView.findViewById(R.id.textView);
-            textView.setText(list.get(pos));
-            textView.setOnClickListener(new View.OnClickListener() {
+            /* Alternative way to define a default onClick handler.
+            convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DescriptionActivity.class);
@@ -61,6 +60,10 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 }
             });
+            */
+
+            TextView textView = (TextView)convertView.findViewById(R.id.textView);
+            textView.setText(list.get(pos));
 
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
             BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(context, GetCompanyResourceId(list.get(pos)));
