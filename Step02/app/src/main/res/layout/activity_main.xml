@@ -30,7 +30,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageViewTrashBin"
+            android:id="@+id/imageViewGlove"
             android:layout_gravity="center"
             android:background="@drawable/glove" />
 
