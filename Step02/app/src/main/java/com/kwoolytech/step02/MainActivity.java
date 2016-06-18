@@ -1,6 +1,5 @@
 package com.kwoolytech.step02;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.DragEvent;
@@ -12,6 +11,7 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
     private BaseballManager baseballManager;
+    Animation shakeAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonThrow).setOnClickListener(buttonOnClickListener);
         findViewById(R.id.imageViewGlove).setOnDragListener(gloveOnDragListener);
         findViewById(R.id.frameLayout).setOnDragListener(layoutOnDragListener);
+
+        shakeAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake);
     }
 
     Button.OnClickListener buttonOnClickListener = new Button.OnClickListener() {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     View view = (View)event.getLocalState();
                     FrameLayout layout = (FrameLayout)view.getParent();
                     layout.removeView(view);
+                    findViewById(R.id.imageViewGlove).startAnimation(shakeAnimation);
                     break;
                 default:
                     break;
