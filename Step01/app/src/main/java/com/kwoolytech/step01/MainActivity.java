@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         list.add("SK Telecom");
         list.add("GE Appliances");
 
-        KwoolyCompanyAdapter adapter = new KwoolyCompanyAdapter(this, R.layout.listviewitem_company,list);
+        KwoolyCompanyAdapter adapter = new KwoolyCompanyAdapter(this, R.layout.listviewitem_company, list);
 
         listView = (ListView)findViewById(R.id.listView);
         listView.setAdapter(adapter);
@@ -34,5 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        return;
     }
 }

@@ -14,28 +14,9 @@ public class DescriptionActivity extends Activity {
 
         Intent intent = getIntent();
 
-        DisplayCompany(GetCompanyResourceId(intent.getStringExtra("Company")));
-    }
+        DisplayCompany(IntentTool.GetCompanyResourceId(intent.getStringExtra("Company")));
 
-    private int GetCompanyResourceId(String company) {
-        int resourceId = 0;
-
-        switch(company) {
-            case "Dasan Networks":
-                resourceId = R.drawable.dasannetworks;
-                break;
-            case "SK Telecom":
-                resourceId = R.drawable.sktelecom;
-                break;
-            case "GE Appliances":
-                resourceId = R.drawable.geappliances;
-                break;
-            default:
-                resourceId = R.drawable.auckland;
-                break;
-        }
-
-        return resourceId;
+        return;
     }
 
     private void DisplayCompany(int resourceId) {
@@ -43,5 +24,7 @@ public class DescriptionActivity extends Activity {
 
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
         imageView.setImageDrawable(bitmapDrawable);
+
+        return;
     }
 }

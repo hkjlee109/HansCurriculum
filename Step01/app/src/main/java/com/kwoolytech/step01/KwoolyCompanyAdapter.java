@@ -15,13 +15,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by kwooly on 5/15/16.
- */
 public class KwoolyCompanyAdapter extends BaseAdapter {
-    ArrayList<String> list;
-    Context context;
-    int itemLayout;
+    private ArrayList<String> list;
+    private Context context;
+    private int itemLayout;
 
     KwoolyCompanyAdapter(Context context, int itemLayout, ArrayList<String> list){
         this.context = context;
@@ -65,61 +62,22 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
             TextView textView = (TextView)convertView.findViewById(R.id.textView);
             textView.setText(list.get(pos));
 
+            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat
+                                                .getDrawable(context, IntentTool.GetCompanyResourceId(list.get(pos)));
             ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(context, GetCompanyResourceId(list.get(pos)));
             imageView.setImageDrawable(bitmapDrawable);
 
             Button button = (Button)convertView.findViewById(R.id.button);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GetCompanyHomepageURL(list.get(pos))));
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                                               Uri.parse(IntentTool.GetCompanyHomepageURL(list.get(pos))));
                     context.startActivity(intent);
                 }
             });
         }
+
         return convertView;
-    }
-
-    private int GetCompanyResourceId(String company) {
-        int resourceId = 0;
-
-        switch(company) {
-            case "Dasan Networks":
-                resourceId = R.drawable.dasannetworks;
-                break;
-            case "SK Telecom":
-                resourceId = R.drawable.sktelecom;
-                break;
-            case "GE Appliances":
-                resourceId = R.drawable.geappliances;
-                break;
-            default:
-                resourceId = R.drawable.auckland;
-                break;
-        }
-
-        return resourceId;
-    }
-
-    private String GetCompanyHomepageURL(String company) {
-        String url;
-
-        switch (company) {
-            case "Dasan Networks":
-                url = "http://www.dasannetworks.com";
-                break;
-            case "SK Telecom":
-                url = "http://www.sktelecom.com";
-                break;
-            case "GE Appliances":
-                url = "http://www.geappliances.com";
-                break;
-            default:
-                url = "http://www.aucland.ac.nz";
-                break;
-        }
-
-        return url;
     }
 }
