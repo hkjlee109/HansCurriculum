@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 case DragEvent.ACTION_DROP:
                     View view = (View)event.getLocalState();
                     view.animate()
-                            .x(event.getX() - CommonConstant.BallWidth/2)
-                            .y(event.getY() - CommonConstant.BallHeight/2)
+                            .x(event.getX() - MainActivity.this.getResources().getDimensionPixelSize(R.dimen.ball_width)/2)
+                            .y(event.getY() - MainActivity.this.getResources().getDimensionPixelSize(R.dimen.ball_height)/2)
                             .setDuration(1000).start();
                     break;
                 default:

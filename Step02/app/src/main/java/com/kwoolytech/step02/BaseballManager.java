@@ -1,5 +1,6 @@
 package com.kwoolytech.step02;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -9,12 +10,14 @@ import java.util.Random;
 
 public class BaseballManager {
     private Context mainContext;
+    private Resources mainResources;
     private FrameLayout mainLayout;
     private Random random;
     private View.OnLongClickListener baseballOnLongClickListener;
 
     public BaseballManager(Context context, FrameLayout frameLayout) {
         mainContext = context;
+        mainResources = mainContext.getResources();
         mainLayout = frameLayout;
         random = new Random();
 
@@ -33,10 +36,11 @@ public class BaseballManager {
         image.setBackgroundResource(R.drawable.baseball);
         image.setOnLongClickListener(baseballOnLongClickListener);
 
-        FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(CommonConstant.BallWidth,
-                                                                      CommonConstant.BallHeight);
-        param.leftMargin = random.nextInt(mainLayout.getWidth() - CommonConstant.BallWidth);
-        param.topMargin = random.nextInt(mainLayout.getHeight() - CommonConstant.BallHeight);
+        FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(
+                                               mainResources.getDimensionPixelSize(R.dimen.ball_width),
+                                               mainResources.getDimensionPixelSize(R.dimen.ball_height));
+        param.leftMargin = random.nextInt(mainLayout.getWidth() - mainResources.getDimensionPixelSize(R.dimen.ball_width));
+        param.topMargin = random.nextInt(mainLayout.getHeight() - mainResources.getDimensionPixelSize(R.dimen.ball_height));
         image.setLayoutParams(param);
 
         mainLayout.addView(image);
