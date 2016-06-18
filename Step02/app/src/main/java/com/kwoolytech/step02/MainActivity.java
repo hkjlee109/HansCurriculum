@@ -1,9 +1,12 @@
 package com.kwoolytech.step02;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonThrow).setOnClickListener(buttonOnClickListener);
         findViewById(R.id.imageViewGlove).setOnDragListener(gloveOnDragListener);
+        findViewById(R.id.frameLayout).setOnDragListener(layoutOnDragListener);
     }
 
     Button.OnClickListener buttonOnClickListener = new Button.OnClickListener() {
@@ -44,6 +48,23 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+    };
 
+    View.OnDragListener layoutOnDragListener = new View.OnDragListener() {
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DROP:
+                    View view = (View)event.getLocalState();
+                    view.animate()
+                            .x(event.getX() - 60)
+                            .y(event.getY() - 60)
+                            .setDuration(1000).start();
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
     };
 }
