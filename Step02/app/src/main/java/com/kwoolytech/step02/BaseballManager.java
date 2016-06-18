@@ -101,7 +101,7 @@ public class BaseballManager {
         return;
     }
 
-    public Button.OnClickListener GetButtonOnClickListener() { return buttonOnClickListener; }
-    public View.OnDragListener    GetGloveOnDragListener()   { return gloveOnDragListener; }
-    public View.OnDragListener    GetLayoutOnDragListener()  { return layoutOnDragListener; }
+    public Button.OnClickListener getButtonOnClickListener() { return buttonOnClickListener; }
+    public View.OnDragListener    getGloveOnDragListener()   { return gloveOnDragListener; }
+    public View.OnDragListener    getLayoutOnDragListener()  { return layoutOnDragListener; }
 }

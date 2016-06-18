@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
                                   findViewById(R.id.imageViewGlove),
                                   AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake));
 
-        findViewById(R.id.buttonThrow).setOnClickListener(baseballManager.GetButtonOnClickListener());
-        findViewById(R.id.imageViewGlove).setOnDragListener(baseballManager.GetGloveOnDragListener());
-        findViewById(R.id.frameLayout).setOnDragListener(baseballManager.GetLayoutOnDragListener());
+        findViewById(R.id.buttonThrow).setOnClickListener(baseballManager.getButtonOnClickListener());
+        findViewById(R.id.imageViewGlove).setOnDragListener(baseballManager.getGloveOnDragListener());
+        findViewById(R.id.frameLayout).setOnDragListener(baseballManager.getLayoutOnDragListener());
     }
 }
