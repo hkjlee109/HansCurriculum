@@ -21,6 +21,12 @@ public class MainActivity extends AppCompatActivity {
         list.add("Dasan Networks");
         list.add("SK Telecom");
         list.add("GE Appliances");
+        list.add("Auckland-01");
+        list.add("Auckland-02");
+        list.add("Auckland-03");
+        list.add("Auckland-04");
+        list.add("Auckland-05");
+        list.add("Auckland-06");
 
         KwoolyCompanyAdapter adapter = new KwoolyCompanyAdapter(this, R.layout.listviewitem_company, list);
 

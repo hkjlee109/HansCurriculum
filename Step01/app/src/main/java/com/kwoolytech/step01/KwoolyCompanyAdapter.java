@@ -19,11 +19,19 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
     private ArrayList<String> list;
     private Context context;
     private int itemLayout;
+    private LayoutInflater inflater;
+
+    public class ViewHolder {
+        TextView textView;
+        ImageView imageView;
+        Button button;
+    }
 
     KwoolyCompanyAdapter(Context context, int itemLayout, ArrayList<String> list){
         this.context = context;
         this.itemLayout = itemLayout;
         this.list = list;
+        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -44,40 +52,37 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        if(convertView==null) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(itemLayout, parent, false);
 
-            /* Alternative way to define a default onClick handler.
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, DescriptionActivity.class);
-                    intent.putExtra("Company", list.get(pos));
-                    context.startActivity(intent);
-                }
-            });
-            */
+        View view = inflater.inflate(itemLayout, parent, false);
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.textView = (TextView)view.findViewById(R.id.textView);
+        viewHolder.imageView = (ImageView)view.findViewById(R.id.imageView);
+        viewHolder.button = (Button)view.findViewById(R.id.button);
 
-            TextView textView = (TextView)convertView.findViewById(R.id.textView);
-            textView.setText(list.get(pos));
+        viewHolder.textView.setText(list.get(pos));
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat
+                                            .getDrawable(context, IntentTool.GetCompanyResourceId(list.get(pos)));
+        viewHolder.imageView.setImageDrawable(bitmapDrawable);
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                           Uri.parse(IntentTool.GetCompanyHomepageURL(list.get(pos))));
+                context.startActivity(intent);
+            }
+        });
 
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat
-                                                .getDrawable(context, IntentTool.GetCompanyResourceId(list.get(pos)));
-            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-            imageView.setImageDrawable(bitmapDrawable);
+        /* Alternative way to define a default onClick handler.
+        convertView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+                Intent intent = new Intent(context, DescriptionActivity.class);
+                intent.putExtra("Company", list.get(pos));
+                context.startActivity(intent);
+            }
+        });
+        */
 
-            Button button = (Button)convertView.findViewById(R.id.button);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
-                                               Uri.parse(IntentTool.GetCompanyHomepageURL(list.get(pos))));
-                    context.startActivity(intent);
-                }
-            });
-        }
-
-        return convertView;
+        return view;
     }
 }
