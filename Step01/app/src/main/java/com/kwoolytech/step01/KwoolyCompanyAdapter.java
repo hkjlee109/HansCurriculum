@@ -52,12 +52,24 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
+        View view;
+        ViewHolder viewHolder;
 
-        View view = inflater.inflate(itemLayout, parent, false);
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.textView = (TextView)view.findViewById(R.id.textView);
-        viewHolder.imageView = (ImageView)view.findViewById(R.id.imageView);
-        viewHolder.button = (Button)view.findViewById(R.id.button);
+        if(convertView == null)
+        {
+            view = inflater.inflate(itemLayout, parent, false);
+            viewHolder = new ViewHolder();
+
+            viewHolder.textView = (TextView)view.findViewById(R.id.textView);
+            viewHolder.imageView = (ImageView)view.findViewById(R.id.imageView);
+            viewHolder.button = (Button)view.findViewById(R.id.button);
+            view.setTag(viewHolder);
+        }
+        else
+        {
+            view = convertView;
+            viewHolder = (ViewHolder)view.getTag();
+        }
 
         viewHolder.textView.setText(list.get(pos));
         BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat
