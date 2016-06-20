@@ -15,18 +15,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by kwooly on 5/15/16.
- */
 public class KwoolyCompanyAdapter extends BaseAdapter {
-    ArrayList<String> list;
-    Context context;
-    int itemLayout;
+    private ArrayList<String> list;
+    private Context context;
+    private int itemLayout;
+    private LayoutInflater inflater;
+
+    public class ViewHolder {
+        TextView textView;
+        ImageView imageView;
+        Button button;
+    }
 
     KwoolyCompanyAdapter(Context context, int itemLayout, ArrayList<String> list){
         this.context = context;
         this.itemLayout = itemLayout;
         this.list = list;
+        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -47,79 +52,49 @@ public class KwoolyCompanyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        if(convertView==null) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(itemLayout, parent, false);
+        View view;
+        ViewHolder viewHolder;
 
-            /* Alternative way to define a default onClick handler.
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, DescriptionActivity.class);
-                    intent.putExtra("Company", list.get(pos));
-                    context.startActivity(intent);
-                }
-            });
-            */
+        if(convertView == null)
+        {
+            view = inflater.inflate(itemLayout, parent, false);
+            viewHolder = new ViewHolder();
 
-            TextView textView = (TextView)convertView.findViewById(R.id.textView);
-            textView.setText(list.get(pos));
-
-            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(context, GetCompanyResourceId(list.get(pos)));
-            imageView.setImageDrawable(bitmapDrawable);
-
-            Button button = (Button)convertView.findViewById(R.id.button);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GetCompanyHomepageURL(list.get(pos))));
-                    context.startActivity(intent);
-                }
-            });
+            viewHolder.textView = (TextView)view.findViewById(R.id.textView);
+            viewHolder.imageView = (ImageView)view.findViewById(R.id.imageView);
+            viewHolder.button = (Button)view.findViewById(R.id.button);
+            view.setTag(viewHolder);
         }
-        return convertView;
-    }
-
-    private int GetCompanyResourceId(String company) {
-        int resourceId = 0;
-
-        switch(company) {
-            case "Dasan Networks":
-                resourceId = R.drawable.dasannetworks;
-                break;
-            case "SK Telecom":
-                resourceId = R.drawable.sktelecom;
-                break;
-            case "GE Appliances":
-                resourceId = R.drawable.geappliances;
-                break;
-            default:
-                resourceId = R.drawable.auckland;
-                break;
+        else
+        {
+            view = convertView;
+            viewHolder = (ViewHolder)view.getTag();
         }
 
-        return resourceId;
-    }
+        viewHolder.textView.setText(list.get(pos));
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat
+                                            .getDrawable(context, IntentTool.GetCompanyResourceId(list.get(pos)));
+        viewHolder.imageView.setImageDrawable(bitmapDrawable);
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                           Uri.parse(IntentTool.GetCompanyHomepageURL(list.get(pos))));
+                context.startActivity(intent);
+            }
+        });
 
-    private String GetCompanyHomepageURL(String company) {
-        String url;
+        /* Alternative way to define a default onClick handler.
+        convertView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+                Intent intent = new Intent(context, DescriptionActivity.class);
+                intent.putExtra("Company", list.get(pos));
+                context.startActivity(intent);
+            }
+        });
+        */
 
-        switch (company) {
-            case "Dasan Networks":
-                url = "http://www.dasannetworks.com";
-                break;
-            case "SK Telecom":
-                url = "http://www.sktelecom.com";
-                break;
-            case "GE Appliances":
-                url = "http://www.geappliances.com";
-                break;
-            default:
-                url = "http://www.aucland.ac.nz";
-                break;
-        }
-
-        return url;
+        return view;
     }
 }
