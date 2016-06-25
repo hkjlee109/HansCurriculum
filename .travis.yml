@@ -1,5 +1,5 @@
 language: android
-before_install: cd Step02
+before_script: cd Step02
 script: ./gradlew build 
 android:
   components:
