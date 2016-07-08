@@ -1,6 +1,8 @@
 package com.kwoolytech.step03;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -14,6 +16,7 @@ import java.net.URL;
 
 interface KwoolyHttpCallback {
     void getJsonDataCallback (String result);
+    void getBitmapDataCallback (Bitmap result);
 }
 
 public class KwoolyHttp {
@@ -27,7 +30,13 @@ public class KwoolyHttp {
         if(networkIsConnected()) {
             new HttpGetJsonDataTask(callback).execute(url);
         }
+        return;
+    }
 
+    public void httpGetBitmapData(String url, KwoolyHttpCallback callback) throws IOException {
+        if(networkIsConnected()) {
+            new HttpGetBitmapDataTask(callback).execute(url);
+        }
         return;
     }
 
@@ -49,9 +58,9 @@ public class KwoolyHttp {
         @Override
         protected String doInBackground(String... urls) {
             try {
-                return startHttpGetTransaction(urls[0]);
+                return startHttpGetJsonDataTransaction(urls[0]);
             } catch (IOException e) {
-                return "Unable to retrieve web page. URL may be invalid.";
+                return null;
             }
         }
 
@@ -62,7 +71,29 @@ public class KwoolyHttp {
         }
     }
 
-    private String startHttpGetTransaction(String url) throws IOException {
+    private class HttpGetBitmapDataTask extends AsyncTask<String, Void, Bitmap> {
+        final KwoolyHttpCallback callback;
+
+        HttpGetBitmapDataTask(KwoolyHttpCallback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                return startHttpGetBitmapDataTransaction(urls[0]);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            callback.getBitmapDataCallback(result);
+        }
+    }
+
+    private String startHttpGetJsonDataTransaction(String url) throws IOException {
         StringBuilder result = new StringBuilder();
 
         try {
@@ -93,8 +124,39 @@ public class KwoolyHttp {
             httpConnection.disconnect();
         } catch (Exception e) {
             Log.e("KwoolyHttp", "Exception: Unable to connect.");
+            e.printStackTrace();
         }
 
         return result.toString();
+    }
+
+    private Bitmap startHttpGetBitmapDataTransaction(String url) throws IOException {
+        Bitmap result = null;
+
+        try {
+            URL requestUrl = new URL(url);
+            if(requestUrl == null)
+                return null;
+
+            HttpURLConnection httpConnection = (HttpURLConnection)requestUrl.openConnection();
+            if(httpConnection == null)
+                return null;
+
+            httpConnection.setReadTimeout(10000);
+            httpConnection.setConnectTimeout(10000);
+            httpConnection.setRequestMethod("GET");
+            httpConnection.setDoInput(true);
+
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                result = BitmapFactory.decodeStream(httpConnection.getInputStream());
+            }
+
+            httpConnection.disconnect();
+        } catch (Exception e) {
+            Log.e("KwoolyHttp", "Exception: Unable to connect.");
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

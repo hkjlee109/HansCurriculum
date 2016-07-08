@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private HansWeatherDataModel dataModel;
 
@@ -18,12 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
         dataModel = new HansWeatherDataModel(MainActivity.this);
 
-        ArrayList<String> itemList = new ArrayList<String>();
-        itemList.add("Location");
-        itemList.add("Temperature");
-
         HansWeatherViewAdapter adapter = new HansWeatherViewAdapter(MainActivity.this, dataModel,
-                                                 R.layout.listviewitem_weather, itemList);
+                                                 R.layout.listviewitem_weather);
 
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(adapter);
 
