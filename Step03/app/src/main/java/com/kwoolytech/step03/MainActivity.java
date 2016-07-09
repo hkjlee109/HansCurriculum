@@ -23,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
         dataModel = new HansWeatherDataModel();
         httpClient  = new KwoolyHttp(MainActivity.this);
 
-        InitializeUi();
-        InitializeKwoolyHttpCallbackFunction();
+        initializeUi();
+        initializeKwoolyHttpCallbackFunction();
 
-        QueryWeatherJsonData();
+        queryWeatherJsonData();
         return;
     }
 
-    private void InitializeUi() {
+    private void initializeUi() {
         listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel,
                                          R.layout.listviewitem_weather);
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
@@ -38,19 +38,19 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonRefresh).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QueryWeatherJsonData();
+                queryWeatherJsonData();
             }
         });
         return;
     }
 
-    private void InitializeKwoolyHttpCallbackFunction() {
+    private void initializeKwoolyHttpCallbackFunction() {
         httpClientCallback = new KwoolyHttpCallback() {
             @Override
-            public void getJsonDataCallback(String result) {
+            public void onWeatherJsonDataReceived(String result) {
                 try {
                     dataModel.setWeatherJsonData(result);
-                    QueryWeatherBitmapData();
+                    queryWeatherBitmapData();
                 } catch (Exception e) {
                     Log.e(getClass().getName(), "Exception: ");
                     e.printStackTrace();
@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void getBitmapDataCallback(Bitmap result) {
+            public void onWeatherBitmapDataReceived(Bitmap result) {
                 try {
                     dataModel.setWeatherBitmapData(result);
-                    PresentData();
+                    presentData();
                 } catch (Exception e) {
                     Log.e(getClass().getName(), "Exception: ");
                     e.printStackTrace();
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void QueryWeatherJsonData() {
+    private void queryWeatherJsonData() {
         try {
             httpClient.httpGetJsonData(
                     CommonTool.WeatherQueryUrl + "lat=37.49&lon=127.01&units=metric" + CommonTool.ApiKey,
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-    private void QueryWeatherBitmapData() {
+    private void queryWeatherBitmapData() {
         try {
             httpClient.httpGetBitmapData(
                     CommonTool.WeatherIconUrl + dataModel.getIconCode() + ".png",
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-    private void PresentData() {
+    private void presentData() {
         listViewWeatherAdapter.notifyDataSetChanged();
         return;
     }

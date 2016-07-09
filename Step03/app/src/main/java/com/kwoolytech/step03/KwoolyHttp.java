@@ -15,8 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 interface KwoolyHttpCallback {
-    void getJsonDataCallback (String result);
-    void getBitmapDataCallback (Bitmap result);
+    void onWeatherJsonDataReceived(String result);
+    void onWeatherBitmapDataReceived(Bitmap result);
 }
 
 public class KwoolyHttp {
@@ -68,7 +68,7 @@ public class KwoolyHttp {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            callback.getJsonDataCallback(result);
+            callback.onWeatherJsonDataReceived(result);
         }
     }
 
@@ -91,7 +91,7 @@ public class KwoolyHttp {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            callback.getBitmapDataCallback(result);
+            callback.onWeatherBitmapDataReceived(result);
         }
     }
 
