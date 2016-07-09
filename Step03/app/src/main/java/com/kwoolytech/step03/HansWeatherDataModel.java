@@ -1,47 +1,24 @@
 package com.kwoolytech.step03;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
-import android.widget.ListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class HansWeatherDataModel {
-    private Context            mainContext;
-    private KwoolyHttp         httpClient;
-    private KwoolyHttpCallback httpClientCallback;
-    private JSONObject         weatherData;
-    private Bitmap             weatherBitmap;
+    private JSONObject weatherData;
+    private Bitmap     weatherBitmap;
 
-    HansWeatherDataModel(Context context) {
-        mainContext = context;
-        httpClient  = new KwoolyHttp(mainContext);
+    public HansWeatherDataModel() {}
 
-        httpClientCallback = new KwoolyHttpCallback() {
-            @Override
-            public void getJsonDataCallback(String result) {
-                try {
-                    weatherData = new JSONObject(result);
-                    httpClient.httpGetBitmapData(
-                                   "http://openweathermap.org/img/w/" + getIconCode() + ".png",
-                                   httpClientCallback);
-                } catch (Exception e) {
-                    Log.e("HansWeatherDataModel", "Exception: Unable to handle getJsonDataCallback.");
-                    e.printStackTrace();
-                }
-            }
+    public void setWeatherJsonData(String result) throws JSONException {
+        weatherData = new JSONObject(result);
+        return;
+    }
 
-            @Override
-            public void getBitmapDataCallback(Bitmap result) {
-                weatherBitmap = result;
-                ((ListView)((Activity) mainContext).findViewById(R.id.listViewWeather)).invalidateViews();
-            }
-        };
-
-        UpdateData();
+    public void setWeatherBitmapData(Bitmap result) throws JSONException {
+        weatherBitmap = result;
+        return;
     }
 
     public String getCountry() throws JSONException {
@@ -91,16 +68,5 @@ public class HansWeatherDataModel {
             return null;
 
         return weatherBitmap;
-    }
-
-    private void UpdateData() {
-        try {
-            httpClient.httpGetJsonData(
-                           CommonTool.WeatherQueryUrl + "lat=37.49&lon=127.01&units=metric" + CommonTool.ApiKey,
-                           httpClientCallback);
-        } catch (Exception e) {
-            Log.e("HansWeatherDataModel", "Exception: Unable to UpdateData.");
-            e.printStackTrace();
-        }
     }
 }

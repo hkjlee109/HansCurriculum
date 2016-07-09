@@ -10,8 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
 public class HansWeatherViewAdapter extends BaseAdapter {
     private Context              mainContext;
     private HansWeatherDataModel mainDataModel;
@@ -26,7 +24,7 @@ public class HansWeatherViewAdapter extends BaseAdapter {
         ImageView imageWeather;
     }
 
-    HansWeatherViewAdapter(Context context, HansWeatherDataModel dataModel, int layout) {
+    public HansWeatherViewAdapter(Context context, HansWeatherDataModel dataModel, int layout) {
         mainContext   = context;
         mainDataModel = dataModel;
         itemLayout    = layout;

@@ -22,7 +22,7 @@ interface KwoolyHttpCallback {
 public class KwoolyHttp {
     private Context mainContext;
 
-    KwoolyHttp(Context context) {
+    public KwoolyHttp(Context context) {
         mainContext = context;
     }
 
@@ -60,6 +60,7 @@ public class KwoolyHttp {
             try {
                 return startHttpGetJsonDataTransaction(urls[0]);
             } catch (IOException e) {
+                Log.e(getClass().getName(), "Exception: ");
                 return null;
             }
         }
@@ -83,6 +84,7 @@ public class KwoolyHttp {
             try {
                 return startHttpGetBitmapDataTransaction(urls[0]);
             } catch (IOException e) {
+                Log.e(getClass().getName(), "Exception: ");
                 return null;
             }
         }
@@ -123,7 +125,7 @@ public class KwoolyHttp {
 
             httpConnection.disconnect();
         } catch (Exception e) {
-            Log.e("KwoolyHttp", "Exception: Unable to connect.");
+            Log.e(getClass().getName(), "Exception: ");
             e.printStackTrace();
         }
 
@@ -153,7 +155,7 @@ public class KwoolyHttp {
 
             httpConnection.disconnect();
         } catch (Exception e) {
-            Log.e("KwoolyHttp", "Exception: Unable to connect.");
+            Log.e(getClass().getName(), "Exception: ");
             e.printStackTrace();
         }
 
