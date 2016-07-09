@@ -22,6 +22,7 @@ public class HansWeatherViewAdapter extends BaseAdapter {
         TextView  textAverageTemperature;
         TextView  textMaxTemperature;
         ImageView imageWeather;
+        TextView  textDatetime;
     }
 
     public HansWeatherViewAdapter(Context context, HansWeatherDataModel dataModel, int layout) {
@@ -57,6 +58,7 @@ public class HansWeatherViewAdapter extends BaseAdapter {
             viewHolder.textAverageTemperature = (TextView) view.findViewById(R.id.textAverageTemperature);
             viewHolder.textMaxTemperature = (TextView) view.findViewById(R.id.textMaxTemperature);
             viewHolder.imageWeather = (ImageView) view.findViewById(R.id.imageWeather);
+            viewHolder.textDatetime = (TextView) view.findViewById(R.id.textDatetime);
 
             BitmapDrawable bitmapDrawable = (BitmapDrawable) ContextCompat
                                                 .getDrawable(mainContext, R.drawable.location);
@@ -74,6 +76,7 @@ public class HansWeatherViewAdapter extends BaseAdapter {
             viewHolder.textAverageTemperature.setText(Integer.toString(mainDataModel.getAverageTemperature()));
             viewHolder.textMaxTemperature.setText(Integer.toString(mainDataModel.getMaxTemperature()));
             viewHolder.imageWeather.setImageBitmap(mainDataModel.getWeatherBitmap());
+            viewHolder.textDatetime.setText(mainDataModel.getDatetime());
         } catch (Exception e) {
             e.printStackTrace();
         }

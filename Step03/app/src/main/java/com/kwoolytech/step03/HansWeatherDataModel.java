@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class HansWeatherDataModel {
     private JSONObject weatherData;
     private Bitmap     weatherBitmap;
@@ -54,6 +57,14 @@ public class HansWeatherDataModel {
             return 0;
 
         return (weatherData.getJSONObject("main")).getInt("temp_max");
+    }
+
+    public String getDatetime() throws JSONException {
+        if (weatherData == null)
+            return null;
+
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        return dateFormat.format(new Date(weatherData.getLong("dt")*1000));
     }
 
     public String getIconCode() throws JSONException {
