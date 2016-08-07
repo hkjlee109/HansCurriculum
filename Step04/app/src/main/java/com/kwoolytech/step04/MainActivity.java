@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void queryWeatherJsonData() {
         try {
             httpClient.httpGetJsonData(
-                    CommonTool.WeatherQueryUrl + "lat=37.49&lon=127.01&units=metric" + CommonTool.ApiKey,
+                    CommonTool.WEATHERQUERYURL + "lat=37.49&lon=127.01&units=metric" + CommonTool.APIKEY,
                     httpClientCallback);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception: ");
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void queryWeatherBitmapData() {
         try {
             httpClient.httpGetBitmapData(
-                    CommonTool.WeatherIconUrl + dataModel.getIconCode() + ".png",
+                    CommonTool.WEATHERICONURL + dataModel.getIconCode() + ".png",
                     httpClientCallback);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception: ");
