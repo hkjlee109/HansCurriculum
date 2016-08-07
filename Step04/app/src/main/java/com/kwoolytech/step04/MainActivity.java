@@ -1,5 +1,6 @@
 package com.kwoolytech.step04;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -153,8 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-
+        if (id == R.id.nav_add) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
