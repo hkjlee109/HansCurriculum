@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onWeatherJsonDataReceived(String result) {
                 try {
                     dataModel.setWeatherJsonData(result);
+                    presentData();
                     queryWeatherBitmapData();
                 } catch (Exception e) {
                     Log.e(getClass().getName(), "Exception: ");
