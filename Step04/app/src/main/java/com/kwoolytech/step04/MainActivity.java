@@ -64,12 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel, R.layout.listviewitem_weather);
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
 
-        findViewById(R.id.buttonRefresh).setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queryWeatherJsonData(37.49, 127.01);
-            }
-        });
         return;
     }
 
