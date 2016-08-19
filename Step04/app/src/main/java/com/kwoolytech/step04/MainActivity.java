@@ -35,32 +35,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        dataModel = new HansWeatherDataModel();
+        dataModel   = new HansWeatherDataModel();
         httpClient  = new KwoolyHttp(MainActivity.this);
 
         initializeUi();
         initializeKwoolyHttpCallbackFunction();
 
-        queryWeatherJsonData();
+        queryWeatherJsonData(37.49, 127.01);
 
         return;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CommonTool.CODE_PROCESS_MAP_LOCATION_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                queryWeatherJsonData(data.getDoubleExtra("Lat", 0), data.getDoubleExtra("Lng", 0));
+            }
+        }
+    }
+
     private void initializeUi() {
-        listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel,
-                                         R.layout.listviewitem_weather);
+        listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel, R.layout.listviewitem_weather);
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
 
         findViewById(R.id.buttonRefresh).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                queryWeatherJsonData();
+                queryWeatherJsonData(37.49, 127.01);
             }
         });
         return;
@@ -93,10 +100,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-    private void queryWeatherJsonData() {
+    private void queryWeatherJsonData(double lat, double lng) {
         try {
             httpClient.httpGetJsonData(
-                    CommonTool.WEATHERQUERYURL + "lat=37.49&lon=127.01&units=metric" + CommonTool.APIKEY,
+                    CommonTool.WEATHERQUERYURL + "lat=" + lat + "&lon=" + lng + "&units=metric" + CommonTool.APIKEY,
                     httpClientCallback);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception: ");
@@ -156,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_add) {
             Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CommonTool.CODE_PROCESS_MAP_LOCATION_REQUEST);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
