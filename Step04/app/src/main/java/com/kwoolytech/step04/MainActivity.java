@@ -1,7 +1,9 @@
 package com.kwoolytech.step04;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+        setPreferenceVariables();
+
         dataModel   = new HansWeatherDataModel();
         httpClient  = new KwoolyHttp(MainActivity.this);
 
@@ -51,11 +56,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CommonTool.CODE_PROCESS_MAP_LOCATION_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                queryWeatherJsonData(data.getDoubleExtra("Lat", 0), data.getDoubleExtra("Lng", 0));
-            }
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case CommonTool.CODE_MAP_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    queryWeatherJsonData(data.getDoubleExtra("Lat", 0), data.getDoubleExtra("Lng", 0));
+                }
+                break;
+
+            case CommonTool.CODE_SETTINGS_REQUEST:
+                setPreferenceVariables();
+                presentData();
+                break;
+
+            default:
+                break;
         }
+    }
+
+    private void setPreferenceVariables() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String tmp = preferences.getString("unit", "C");
+
+        CommonTool.temperatureUnit = tmp;
     }
 
     private void initializeUi() {
@@ -143,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CommonTool.CODE_SETTINGS_REQUEST);
             return true;
         }
 
@@ -157,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_add) {
             Intent intent = new Intent(this, MapsActivity.class);
-            startActivityForResult(intent, CommonTool.CODE_PROCESS_MAP_LOCATION_REQUEST);
+            startActivityForResult(intent, CommonTool.CODE_MAP_REQUEST);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
