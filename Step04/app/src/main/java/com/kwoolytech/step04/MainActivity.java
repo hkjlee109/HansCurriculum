@@ -1,8 +1,12 @@
 package com.kwoolytech.step04;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,9 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private HansWeatherDataModel   dataModel;
@@ -43,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dataModel   = new HansWeatherDataModel();
         httpClient  = new KwoolyHttp(MainActivity.this);
 
-        initializeUi();
-        initializeKwoolyHttpCallbackFunction();
+        grantPermission();
 
-        queryWeatherJsonData(37.49, 127.01);
+        initializeKwoolyHttpCallbackFunction();
+        initializeUi();
 
         return;
     }
@@ -57,12 +62,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (resultCode == RESULT_OK) {
                 queryWeatherJsonData(data.getDoubleExtra("Lat", 0), data.getDoubleExtra("Lng", 0));
             }
+            else {
+                Toast.makeText(this, "No location picked.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void grantPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_COARSE_LOCATION },
+                    CommonTool.CODE_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
         }
     }
 
     private void initializeUi() {
         listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel, R.layout.listviewitem_weather);
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
+
+        LatLng location = CommonTool.getCurrentLocationOrElse(this,
+                              new LatLng(CommonTool.defaultLat, CommonTool.defaultLng));
+        queryWeatherJsonData(location.latitude, location.longitude);
 
         return;
     }
