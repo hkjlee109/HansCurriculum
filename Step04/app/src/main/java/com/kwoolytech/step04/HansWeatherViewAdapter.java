@@ -72,9 +72,9 @@ public class HansWeatherViewAdapter extends BaseAdapter {
 
         try {
             viewHolder.textLocation.setText(mainDataModel.getCity() + ", " + mainDataModel.getCountry());
-            viewHolder.textMinTemperature.setText(Integer.toString(mainDataModel.getMinTemperature()));
-            viewHolder.textAverageTemperature.setText(Integer.toString(mainDataModel.getAverageTemperature()));
-            viewHolder.textMaxTemperature.setText(Integer.toString(mainDataModel.getMaxTemperature()));
+            viewHolder.textMinTemperature.setText(CommonTool.getCommonTemperature(mainDataModel.getMinTemperature()));
+            viewHolder.textAverageTemperature.setText(CommonTool.getCommonTemperature(mainDataModel.getAverageTemperature()));
+            viewHolder.textMaxTemperature.setText(CommonTool.getCommonTemperature(mainDataModel.getMaxTemperature()));
             viewHolder.imageWeather.setImageBitmap(mainDataModel.getWeatherBitmap());
             viewHolder.textDatetime.setText(mainDataModel.getDatetime());
         } catch (Exception e) {
