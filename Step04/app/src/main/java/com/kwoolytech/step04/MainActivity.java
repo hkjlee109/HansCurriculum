@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
 
         LatLng location = CommonTool.getCurrentLocationOrElse(this,
-                              new LatLng(CommonTool.defaultLat, CommonTool.defaultLng));
+                              new LatLng(CommonTool.DEFAULTLAT, CommonTool.DEFAULTLNG));
         queryWeatherJsonData(location.latitude, location.longitude);
 
         return;

@@ -30,8 +30,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng location = CommonTool.getCurrentLocationOrElse(this, new LatLng(CommonTool.defaultLat,
-                                                                               CommonTool.defaultLng));
+        LatLng location = CommonTool.getCurrentLocationOrElse(this, new LatLng(CommonTool.DEFAULTLAT,
+                                                                               CommonTool.DEFAULTLNG));
 
         map.addMarker(new MarkerOptions().position(location).draggable(true));
         map.moveCamera(CameraUpdateFactory.newLatLng(location));

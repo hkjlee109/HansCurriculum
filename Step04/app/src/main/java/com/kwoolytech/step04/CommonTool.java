@@ -12,8 +12,8 @@ import com.google.android.gms.maps.model.LatLng;
 public class CommonTool {
 
     public static String temperatureUnit = "C";
-    public final static Double defaultLat = 37.49;
-    public final static Double defaultLng = 127.01;
+    public final static Double DEFAULTLAT = 37.49;
+    public final static Double DEFAULTLNG = 127.01;
 
     public final static String WEATHERQUERYURL = "http://api.openweathermap.org/data/2.5/weather?";
     public final static String APIKEY = "&APPID=7c9bbeb8ddd8520e0d7a72bf796ff493";
