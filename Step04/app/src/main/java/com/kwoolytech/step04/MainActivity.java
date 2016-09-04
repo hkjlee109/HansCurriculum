@@ -1,7 +1,14 @@
 package com.kwoolytech.step04;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,9 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private HansWeatherDataModel   dataModel;
@@ -34,34 +42,72 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        dataModel = new HansWeatherDataModel();
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+        setPreferenceVariables();
+
+        dataModel   = new HansWeatherDataModel();
         httpClient  = new KwoolyHttp(MainActivity.this);
 
-        initializeUi();
-        initializeKwoolyHttpCallbackFunction();
+        grantPermission();
 
-        queryWeatherJsonData();
+        initializeKwoolyHttpCallbackFunction();
+        initializeUi();
 
         return;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case CommonTool.CODE_MAP_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    queryWeatherJsonData(data.getDoubleExtra("Lat", 0), data.getDoubleExtra("Lng", 0));
+                } else {
+                    Toast.makeText(this, "No location picked.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case CommonTool.CODE_SETTINGS_REQUEST:
+                setPreferenceVariables();
+                presentData();
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    private void grantPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_COARSE_LOCATION },
+                    CommonTool.CODE_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+        }
+    }
+
+    private void setPreferenceVariables() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String tmp = preferences.getString("unit", "C");
+
+        CommonTool.temperatureUnit = tmp;
+    }
+
     private void initializeUi() {
-        listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel,
-                                         R.layout.listviewitem_weather);
+        listViewWeatherAdapter = new HansWeatherViewAdapter(MainActivity.this, dataModel, R.layout.listviewitem_weather);
         ((ListView)findViewById(R.id.listViewWeather)).setAdapter(listViewWeatherAdapter);
 
-        findViewById(R.id.buttonRefresh).setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queryWeatherJsonData();
-            }
-        });
+        LatLng location = CommonTool.getCurrentLocationOrElse(this,
+                              new LatLng(CommonTool.DEFAULTLAT, CommonTool.DEFAULTLNG));
+        queryWeatherJsonData(location.latitude, location.longitude);
+
         return;
     }
 
@@ -92,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-    private void queryWeatherJsonData() {
+    private void queryWeatherJsonData(double lat, double lng) {
         try {
             httpClient.httpGetJsonData(
-                    CommonTool.WEATHERQUERYURL + "lat=37.49&lon=127.01&units=metric" + CommonTool.APIKEY,
+                    CommonTool.WEATHERQUERYURL + "lat=" + lat + "&lon=" + lng + "&units=metric" + CommonTool.APIKEY,
                     httpClientCallback);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception: ");
@@ -142,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivityForResult(intent, CommonTool.CODE_SETTINGS_REQUEST);
             return true;
         }
 
@@ -153,8 +201,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-
+        if (id == R.id.nav_add) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivityForResult(intent, CommonTool.CODE_MAP_REQUEST);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
